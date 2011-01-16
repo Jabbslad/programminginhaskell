@@ -120,3 +120,94 @@ pos x xs = [i | (x',i) <- zip xs [0..n], x'==x]
 {- sum [x^2| x <- [1..100]] -}
 
 -- Exercise 5.2
+
+-- Exercise 
+
+product' :: Num a => [a] -> a
+product'[] = 1
+product' (x:xs) = x * product' xs 
+
+insert                     :: Ord a => a -> [a] -> [a]
+insert x []                 = [x]
+insert x (y:ys) | x <= y    = x:y:ys
+                | otherwise = y:insert x ys
+
+reverse'       :: [a] -> [a]
+reverse' []     = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+isort :: Ord a => [a] -> [a]
+isort [] = []
+isort (x:xs) = insert x (isort xs)
+
+zip' :: [a] -> [b] -> [(a,b)]
+zip' [] _ = []
+zip' _ [] = []
+zip' (x:xs) (y:ys) = (x,y) : zip xs ys
+
+drop' :: Int -> [a] -> [a]
+drop' 0 xs = xs
+drop' (n+1) [] = []
+drop' (n+1) (_:xs) = drop' n xs
+
+fibonacci :: Int -> Integer
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci (n+2) = fibonacci n + fibonacci (n+1)
+
+{-
+fibonacci 6
+fibonacci 4 + fibonacci 5
+(fibonacci 2 + fibonacci 3) + (fibonacci 3 + fibonacci 4)
+((0 + 1) + (1 + fibonacci 2)) + ((1 + fibonacci 2) + (fibonacci 2 + fibonacci 3))
+((0 + 1) + (1 + (0 + 1))) + ((1 + (0 + 1)) + ((0 + 1) + (1 + fibonacci 2)))
+((0 + 1) + (1 + (0 + 1))) + ((1 + (0 + 1)) + ((0 + 1) + (1 + (0 + 1))))
+-}
+
+qsort :: Ord a => [a] -> [a]
+qsort [] = []
+qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
+	where 
+		smaller = [a | a <- xs, a < x]
+		larger = [a | a <- xs, a >= x]
+		
+(^^^) :: Int -> Int -> Int
+m ^^^ 0 = 1
+m ^^^ (n + 1) = m * (m ^^^ n)
+
+length' :: [a] -> Int
+length' [] = 0
+length' (_:xs) = 1 + length' xs
+
+init' :: [a] -> [a]
+init' [] = []
+init' [_] = []
+init' (x:xs) = x : init' xs
+
+and' :: [Bool] -> Bool
+and' [] = True
+and' (x:xs) = x && and' xs
+
+concat' :: [[a]] -> [a]
+concat' [] = []
+concat' (x:xs) = x ++ concat' xs
+
+replicate' :: Int -> a -> [a]
+replicate' 0 _ = []
+replicate' (n+1) a = a : replicate' n a
+
+nth :: [a] -> Int -> a
+nth (x:_) 0 = x
+nth (_:xs) (n+1) = nth xs n
+
+elem' :: Eq a => a -> [a] -> Bool
+elem' _ [] = False
+elem' a (x:xs) | a == x = True
+			   | otherwise = elem' a xs
+			
+-- Exercise 6.4
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] xs 						= xs
+merge xs [] 						= xs
+merge (x:xs) (y:ys) | x <= y 		= x : merge xs (y:ys)
+                    | otherwise 	= y : merge (x:xs) ys
