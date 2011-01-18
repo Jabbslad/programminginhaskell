@@ -211,3 +211,38 @@ merge [] xs 						= xs
 merge xs [] 						= xs
 merge (x:xs) (y:ys) | x <= y 		= x : merge xs (y:ys)
                     | otherwise 	= y : merge (x:xs) ys
+
+halve' :: [a] -> ([a],[a])
+halve' xs = splitAt (length xs `div` 2) xs
+
+msort :: Ord a => [a] -> [a]
+msort [] = []
+msort [x] = [x]
+msort xs = merge (msort ys) (msort zs)
+		   where (ys,zs) = halve' xs
+		
+sum' :: Num a => [a] -> a
+sum' = foldr (+) 0
+
+take' :: Int -> [a] -> [a]
+take' 0 _ = []
+take' (n+1) [] = []
+take' (n+1) (x:xs) = x : take' n xs 
+
+last' :: [a] -> a
+last' [x] = x
+last' (_:xs) = last' xs
+
+twice :: (a -> a) -> a -> a
+twice f x = f (f x)
+
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = [f x | x <- xs]
+
+map2 :: (a -> b) -> [a] -> [b]
+map2 _ [] = []
+map2 f (x:xs) = (f x) : map2 f xs
+
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' p [] = []
+filter' p (x:xs) | p x 		= x : filter' p xs
